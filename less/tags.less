@@ -1,0 +1,139 @@
+body {
+    background: #ffffff;
+    color: #777;
+}
+
+a {
+	color: #31A2E8;
+	text-decoration: none;
+	
+	&:hover {
+		border-bottom: 1px dotted #31A2E8;
+	}
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Lilly";
+}
+
+h1 {
+    a {
+        color: #31A2E8;
+        text-decoration: none;
+        
+        &:hover {
+        	color: #55BBFA;
+        	border: none;
+        }
+    }
+    
+    small {
+        color: #cccccc;
+        font-size: 16px;
+        font-weight: normal;
+    }
+}
+
+h3 { color: #447fcf; }
+h4 { color: #CB7832; }
+
+.header h1 a {
+	color: #2e2436;
+}
+
+h2 {
+	color: #f59000;//96BA4C;
+	margin: 50px 0px 0px 0px;
+}
+
+p {
+	color: #666;
+	font-family: "Aller";
+	font-weight: normal;
+}
+
+body .container p code, body .container table code {
+	border: 1px solid #dedede;
+	background: #f9f9f9;
+	font-family: 'Courier New', 'Terminal', monospace;
+	color: #2e3436;
+	padding: 3px 5px;
+	font-size: 12px;
+	margin: 12px 0;
+	-moz-border-radius: 2px;
+	
+	&:hover {
+		border: 1px solid #bbb;
+	}
+}
+
+hr {
+    margin: 20px 0 19px;
+    border: 0;
+    border-bottom: 1px solid #eee;
+}
+
+ul, ol {
+	color: #666;
+	font-family: "Aller";
+	font-weight: normal;
+	margin: 30px 0px 30px 40px;
+	padding: 0px;
+}
+
+dt {
+	color: #447fcf;
+	font-family: "Aller";
+	font-weight: bolder;
+}
+
+dd {
+	color: #777;
+	font-family: "Aller";
+	font-weight: normal;
+}
+
+blockquote {
+	background: #f8f8f8 url(/img/quote.gif) no-repeat 12px 12px;
+	margin: 30px 0;
+	padding: 0px 10px 10px 50px;
+	border: 1px solid #F0F0F0;
+	
+	p {
+		font-weight: normal;
+		font-size: 17px;
+		line-height: 1.5em;
+		font-style: italic;
+		font-family: serif;
+		color: #555;
+	}
+}
+
+.footer {
+	text-align: center;
+	font-style: italic;
+	color: #999;
+	font-size: 13px;
+}
+
+table {
+	font-family: sans-serif;
+	border: 1px solid #eee;
+	border-collapse: collapse;
+	margin: 30px 0px;
+	
+	td, th {
+		margin: 0px;
+		padding: 10px;
+		border: 1px solid #eee;
+	}
+	
+	tr {
+		margin: 0px;
+		border: 1px solid #eee;
+	}
+	
+	th, tr:nth-child(2n+1){
+		background: #f6f6f6;
+	}
+}

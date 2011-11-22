@@ -1,6 +1,9 @@
 ---
 layout: default
-title: Semahawk
+title: Szymon Urbaś
 ---
 
-Welcome!
+{% for post in paginator.posts %}
+	<h1><a href="{{ post.url }}">{{ post.title }}</a>&nbsp;<small>{{ post.date | date: "%a, %d %b %Y" }}</small></h1>
+	<p>{{ post.desc }}</p>
+{% endfor %}

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>Initial post. &bull; Szymon Urbaś</title>
+		
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<!--<link href="/assets/stylesheets/bootstrap.css" rel="stylesheet" type="text/css">-->
+		<link rel="stylesheet/less" href="/less/base.less" type="text/css" />
+		<script src="/js/less-1.1.5.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1><a href="/">Szymon Urbas</a> <small>be blaggin'</small></h1>
+			</div>
+			<hr>
+			<div class="content">
+				<h1><a href="">Initial post.</a>&nbsp;<small>Sat, 19 Nov 2011</small></h1>
+<p><p>Oh, you&#8217;re <a href='/'>here</a>! Emmm.. There&#8217;s nothing yet. As you probably can see by yourself. Be your <code>paths</code> straight, good man!</p>
+
+<h2 id='code_samples'>Code samples</h2>
+<div class='highlight'><pre><code class='ruby'><span class='c1'># https://github.com/ruby/ruby/blob/trunk/lib/yaml/store.rb</span>
+
+<span class='c1'>#</span>
+<span class='c1'># YAML::Store</span>
+<span class='c1'>#</span>
+<span class='nb'>require</span> <span class='s1'>&#39;yaml&#39;</span>
+<span class='nb'>require</span> <span class='s1'>&#39;pstore&#39;</span>
+
+<span class='c1'># YAML::Store provides the same functionality as PStore, except it uses YAML</span>
+<span class='c1'># to dump objects instead of Marshal.</span>
+<span class='c1'>#</span>
+<span class='c1'># == Example</span>
+<span class='c1'>#</span>
+<span class='c1'># require &#39;yaml/store&#39;</span>
+<span class='c1'>#</span>
+<span class='c1'># Person = Struct.new :first_name, :last_name</span>
+<span class='c1'>#</span>
+<span class='c1'># people = [Person.new(&quot;Bob&quot;, &quot;Smith&quot;), Person.new(&quot;Mary&quot;, &quot;Johnson&quot;)]</span>
+<span class='c1'>#</span>
+<span class='c1'># store = YAML::Store.new &quot;test.store&quot;</span>
+<span class='c1'>#</span>
+<span class='c1'># store.transaction do</span>
+<span class='c1'># store[&quot;people&quot;] = people</span>
+<span class='c1'># store[&quot;greeting&quot;] = { &quot;hello&quot; =&gt; &quot;world&quot; }</span>
+<span class='c1'># end</span>
+<span class='c1'>#</span>
+<span class='c1'># After running the above code, the contents of &quot;test.store&quot; will be:</span>
+<span class='c1'>#</span>
+<span class='c1'># ---</span>
+<span class='c1'># people:</span>
+<span class='c1'># - !ruby/struct:Person</span>
+<span class='c1'># first_name: Bob</span>
+<span class='c1'># last_name: Smith</span>
+<span class='c1'># - !ruby/struct:Person</span>
+<span class='c1'># first_name: Mary</span>
+<span class='c1'># last_name: Johnson</span>
+<span class='c1'># greeting:</span>
+<span class='c1'># hello: world</span>
+
+<span class='k'>class</span> <span class='nc'>YAML</span><span class='o'>::</span><span class='no'>Store</span> <span class='o'>&lt;</span> <span class='no'>PStore</span>
+
+  <span class='c1'># :call-seq:</span>
+  <span class='c1'># initialize( file_name, yaml_opts = {} )</span>
+  <span class='c1'>#</span>
+  <span class='c1'># Creates a new YAML::Store object, which will store data in +file_name+.</span>
+  <span class='c1'># If the file does not already exist, it will be created.</span>
+  <span class='c1'>#</span>
+  <span class='c1'>#</span>
+  <span class='c1'># Options passed in through +yaml_opts+ will be used when converting the</span>
+  <span class='c1'># store to YAML via Hash#to_yaml().</span>
+  <span class='k'>def</span> <span class='nf'>initialize</span> <span class='n'>file_name</span><span class='p'>,</span> <span class='n'>yaml_opts</span> <span class='o'>=</span> <span class='p'>{}</span>
+    <span class='vi'>@opt</span> <span class='o'>=</span> <span class='n'>yaml_opts</span>
+    <span class='k'>super</span>
+  <span class='k'>end</span>
+
+  <span class='c1'># :stopdoc:</span>
+
+  <span class='k'>def</span> <span class='nf'>dump</span><span class='p'>(</span><span class='n'>table</span><span class='p'>)</span>
+    <span class='no'>YAML</span><span class='o'>.</span><span class='n'>dump</span> <span class='vi'>@table</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>load</span><span class='p'>(</span><span class='n'>content</span><span class='p'>)</span>
+    <span class='n'>table</span> <span class='o'>=</span> <span class='no'>YAML</span><span class='o'>.</span><span class='n'>load</span><span class='p'>(</span><span class='n'>content</span><span class='p'>)</span>
+    <span class='k'>if</span> <span class='n'>table</span> <span class='o'>==</span> <span class='kp'>false</span>
+      <span class='p'>{}</span>
+    <span class='k'>else</span>
+      <span class='n'>table</span>
+    <span class='k'>end</span>
+  <span class='k'>end</span>
+
+  <span class='k'>def</span> <span class='nf'>marshal_dump_supports_canonical_option?</span>
+    <span class='kp'>false</span>
+  <span class='k'>end</span>
+
+  <span class='no'>EMPTY_MARSHAL_DATA</span> <span class='o'>=</span> <span class='no'>YAML</span><span class='o'>.</span><span class='n'>dump</span><span class='p'>({})</span>
+  <span class='no'>EMPTY_MARSHAL_CHECKSUM</span> <span class='o'>=</span> <span class='no'>Digest</span><span class='o'>::</span><span class='no'>MD5</span><span class='o'>.</span><span class='n'>digest</span><span class='p'>(</span><span class='no'>EMPTY_MARSHAL_DATA</span><span class='p'>)</span>
+  <span class='k'>def</span> <span class='nf'>empty_marshal_data</span>
+    <span class='no'>EMPTY_MARSHAL_DATA</span>
+  <span class='k'>end</span>
+  <span class='k'>def</span> <span class='nf'>empty_marshal_checksum</span>
+    <span class='no'>EMPTY_MARSHAL_CHECKSUM</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre>
+</div><div class='highlight'><pre><code class='js'><span class='c1'>// https://github.com/mootools/mootools-core/blob/master/Source/Fx/Fx.Morph.js</span>
+
+<span class='cm'>/*</span>
+<span class='cm'>---</span>
+
+<span class='cm'>name: Fx.Morph</span>
+
+<span class='cm'>description: Formerly Fx.Styles, effect to transition any number of CSS properties for an element using an object of rules, or CSS based selector rules.</span>
+
+<span class='cm'>license: MIT-style license.</span>
+
+<span class='cm'>requires: Fx.CSS</span>
+
+<span class='cm'>provides: Fx.Morph</span>
+
+<span class='cm'>...</span>
+<span class='cm'>*/</span>
+
+<span class='nx'>Fx</span><span class='p'>.</span><span class='nx'>Morph</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Class</span><span class='p'>({</span>
+
+	<span class='nx'>Extends</span><span class='o'>:</span> <span class='nx'>Fx</span><span class='p'>.</span><span class='nx'>CSS</span><span class='p'>,</span>
+
+	<span class='nx'>initialize</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>element</span><span class='p'>,</span> <span class='nx'>options</span><span class='p'>){</span>
+		<span class='k'>this</span><span class='p'>.</span><span class='nx'>element</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>subject</span> <span class='o'>=</span> <span class='nb'>document</span><span class='p'>.</span><span class='nx'>id</span><span class='p'>(</span><span class='nx'>element</span><span class='p'>);</span>
+		<span class='k'>this</span><span class='p'>.</span><span class='nx'>parent</span><span class='p'>(</span><span class='nx'>options</span><span class='p'>);</span>
+	<span class='p'>},</span>
+
+	<span class='nx'>set</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>now</span><span class='p'>){</span>
+		<span class='k'>if</span> <span class='p'>(</span><span class='k'>typeof</span> <span class='nx'>now</span> <span class='o'>==</span> <span class='s1'>&#39;string&#39;</span><span class='p'>)</span> <span class='nx'>now</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>search</span><span class='p'>(</span><span class='nx'>now</span><span class='p'>);</span>
+		<span class='k'>for</span> <span class='p'>(</span><span class='kd'>var</span> <span class='nx'>p</span> <span class='k'>in</span> <span class='nx'>now</span><span class='p'>)</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>render</span><span class='p'>(</span><span class='k'>this</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>,</span> <span class='nx'>p</span><span class='p'>,</span> <span class='nx'>now</span><span class='p'>[</span><span class='nx'>p</span><span class='p'>],</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>unit</span><span class='p'>);</span>
+		<span class='k'>return</span> <span class='k'>this</span><span class='p'>;</span>
+	<span class='p'>},</span>
+
+	<span class='nx'>compute</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>from</span><span class='p'>,</span> <span class='nx'>to</span><span class='p'>,</span> <span class='nx'>delta</span><span class='p'>){</span>
+		<span class='kd'>var</span> <span class='nx'>now</span> <span class='o'>=</span> <span class='p'>{};</span>
+		<span class='k'>for</span> <span class='p'>(</span><span class='kd'>var</span> <span class='nx'>p</span> <span class='k'>in</span> <span class='nx'>from</span><span class='p'>)</span> <span class='nx'>now</span><span class='p'>[</span><span class='nx'>p</span><span class='p'>]</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>parent</span><span class='p'>(</span><span class='nx'>from</span><span class='p'>[</span><span class='nx'>p</span><span class='p'>],</span> <span class='nx'>to</span><span class='p'>[</span><span class='nx'>p</span><span class='p'>],</span> <span class='nx'>delta</span><span class='p'>);</span>
+		<span class='k'>return</span> <span class='nx'>now</span><span class='p'>;</span>
+	<span class='p'>},</span>
+
+	<span class='nx'>start</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>properties</span><span class='p'>){</span>
+		<span class='k'>if</span> <span class='p'>(</span><span class='o'>!</span><span class='k'>this</span><span class='p'>.</span><span class='nx'>check</span><span class='p'>(</span><span class='nx'>properties</span><span class='p'>))</span> <span class='k'>return</span> <span class='k'>this</span><span class='p'>;</span>
+		<span class='k'>if</span> <span class='p'>(</span><span class='k'>typeof</span> <span class='nx'>properties</span> <span class='o'>==</span> <span class='s1'>&#39;string&#39;</span><span class='p'>)</span> <span class='nx'>properties</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>search</span><span class='p'>(</span><span class='nx'>properties</span><span class='p'>);</span>
+		<span class='kd'>var</span> <span class='nx'>from</span> <span class='o'>=</span> <span class='p'>{},</span> <span class='nx'>to</span> <span class='o'>=</span> <span class='p'>{};</span>
+		<span class='k'>for</span> <span class='p'>(</span><span class='kd'>var</span> <span class='nx'>p</span> <span class='k'>in</span> <span class='nx'>properties</span><span class='p'>){</span>
+			<span class='kd'>var</span> <span class='nx'>parsed</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>prepare</span><span class='p'>(</span><span class='k'>this</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>,</span> <span class='nx'>p</span><span class='p'>,</span> <span class='nx'>properties</span><span class='p'>[</span><span class='nx'>p</span><span class='p'>]);</span>
+			<span class='nx'>from</span><span class='p'>[</span><span class='nx'>p</span><span class='p'>]</span> <span class='o'>=</span> <span class='nx'>parsed</span><span class='p'>.</span><span class='nx'>from</span><span class='p'>;</span>
+			<span class='nx'>to</span><span class='p'>[</span><span class='nx'>p</span><span class='p'>]</span> <span class='o'>=</span> <span class='nx'>parsed</span><span class='p'>.</span><span class='nx'>to</span><span class='p'>;</span>
+		<span class='p'>}</span>
+		<span class='k'>return</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>parent</span><span class='p'>(</span><span class='nx'>from</span><span class='p'>,</span> <span class='nx'>to</span><span class='p'>);</span>
+	<span class='p'>}</span>
+
+<span class='p'>});</span>
+
+<span class='nx'>Element</span><span class='p'>.</span><span class='nx'>Properties</span><span class='p'>.</span><span class='nx'>morph</span> <span class='o'>=</span> <span class='p'>{</span>
+
+	<span class='nx'>set</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>options</span><span class='p'>){</span>
+		<span class='k'>this</span><span class='p'>.</span><span class='nx'>get</span><span class='p'>(</span><span class='s1'>&#39;morph&#39;</span><span class='p'>).</span><span class='nx'>cancel</span><span class='p'>().</span><span class='nx'>setOptions</span><span class='p'>(</span><span class='nx'>options</span><span class='p'>);</span>
+		<span class='k'>return</span> <span class='k'>this</span><span class='p'>;</span>
+	<span class='p'>},</span>
+
+	<span class='nx'>get</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(){</span>
+		<span class='kd'>var</span> <span class='nx'>morph</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>retrieve</span><span class='p'>(</span><span class='s1'>&#39;morph&#39;</span><span class='p'>);</span>
+		<span class='k'>if</span> <span class='p'>(</span><span class='o'>!</span><span class='nx'>morph</span><span class='p'>){</span>
+			<span class='nx'>morph</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Fx</span><span class='p'>.</span><span class='nx'>Morph</span><span class='p'>(</span><span class='k'>this</span><span class='p'>,</span> <span class='p'>{</span><span class='nx'>link</span><span class='o'>:</span> <span class='s1'>&#39;cancel&#39;</span><span class='p'>});</span>
+			<span class='k'>this</span><span class='p'>.</span><span class='nx'>store</span><span class='p'>(</span><span class='s1'>&#39;morph&#39;</span><span class='p'>,</span> <span class='nx'>morph</span><span class='p'>);</span>
+		<span class='p'>}</span>
+		<span class='k'>return</span> <span class='nx'>morph</span><span class='p'>;</span>
+	<span class='p'>}</span>
+
+<span class='p'>};</span>
+
+<span class='nx'>Element</span><span class='p'>.</span><span class='nx'>implement</span><span class='p'>({</span>
+
+	<span class='nx'>morph</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>props</span><span class='p'>){</span>
+		<span class='k'>this</span><span class='p'>.</span><span class='nx'>get</span><span class='p'>(</span><span class='s1'>&#39;morph&#39;</span><span class='p'>).</span><span class='nx'>start</span><span class='p'>(</span><span class='nx'>props</span><span class='p'>);</span>
+		<span class='k'>return</span> <span class='k'>this</span><span class='p'>;</span>
+	<span class='p'>}</span>
+
+<span class='p'>});</span>
+</code></pre>
+</div><div class='highlight'><pre><code class='haskell'><span class='c1'>-- A part of https://github.com/archhaskell/cabal2arch/blob/master/Main.hs</span>
+
+<span class='cm'>{-# LANGUAGE DeriveDataTypeable #-}</span>
+
+<span class='c1'>-- |</span>
+<span class='c1'>-- Module : cabal2arch: convert cabal packages to Arch Linux PKGBUILD format</span>
+<span class='c1'>-- Copyright : (c) Don Stewart, 2008 .. 2010</span>
+<span class='c1'>-- License : BSD3</span>
+<span class='c1'>--</span>
+<span class='c1'>-- Maintainer: Don Stewart &lt;dons@galois.com&gt;</span>
+<span class='c1'>-- Stability : provisional</span>
+<span class='c1'>-- Portability:</span>
+<span class='c1'>--</span>
+
+<span class='c1'>-- TODO: if build-type: Configure, accurate C library dependecies</span>
+<span class='c1'>-- require downloading the source, and running configure</span>
+<span class='c1'>--</span>
+<span class='c1'>-- C libraries are dynamically linked, should be listed in depends,</span>
+<span class='c1'>-- rather than makedepends</span>
+
+<span class='kr'>import</span> <span class='nn'>Distribution.PackageDescription.Parse</span>
+<span class='kr'>import</span> <span class='nn'>Distribution.Simple.Utils</span> <span class='k'>hiding</span> <span class='p'>(</span><span class='nf'>die</span><span class='p'>)</span>
+<span class='kr'>import</span> <span class='nn'>Distribution.Verbosity</span>
+<span class='kr'>import</span> <span class='nn'>Distribution.Text</span>
+
+<span class='c1'>-- from the archlinux package:</span>
+<span class='kr'>import</span> <span class='nn'>Distribution.ArchLinux.PkgBuild</span>
+<span class='kr'>import</span> <span class='nn'>Distribution.ArchLinux.CabalTranslation</span>
+
+<span class='kr'>import</span> <span class='nn'>Control.Monad</span>
+<span class='kr'>import</span> <span class='nn'>Control.Monad.Error</span>
+<span class='kr'>import</span> <span class='k'>qualified</span> <span class='nn'>Control.Exception</span> <span class='k'>as</span> <span class='n'>CE</span>
+
+<span class='kr'>import</span> <span class='nn'>Data.List</span>
+
+<span class='kr'>import</span> <span class='nn'>Text.PrettyPrint</span>
+
+<span class='kr'>import</span> <span class='nn'>Paths_cabal2arch</span>
+<span class='kr'>import</span> <span class='nn'>Data.Version</span> <span class='p'>(</span><span class='nf'>showVersion</span><span class='p'>)</span>
+
+<span class='kr'>import</span> <span class='nn'>System.Directory</span>
+<span class='kr'>import</span> <span class='nn'>System.Exit</span>
+<span class='kr'>import</span> <span class='nn'>System.FilePath</span>
+<span class='kr'>import</span> <span class='nn'>System.IO</span>
+<span class='kr'>import</span> <span class='nn'>System.Process</span> <span class='n'>hiding</span><span class='p'>(</span><span class='n'>cwd</span><span class='p'>)</span>
+
+<span class='kr'>import</span> <span class='nn'>System.Console.CmdArgs</span>
+<span class='kr'>import</span> <span class='nn'>Cabal2Arch.Util</span>
+
+<span class='kr'>data</span> <span class='kt'>CmdLnArgs</span>
+    <span class='ow'>=</span> <span class='kt'>CmdLnConvertOne</span> <span class='p'>{</span> <span class='n'>argCabalFile</span> <span class='ow'>::</span> <span class='kt'>String</span><span class='p'>,</span> <span class='n'>argCreateTar</span> <span class='ow'>::</span> <span class='kt'>Bool</span><span class='p'>,</span> <span class='n'>argDataFiles</span> <span class='ow'>::</span> <span class='kt'>String</span> <span class='p'>}</span>
+    <span class='kr'>deriving</span> <span class='p'>(</span><span class='kt'>Data</span><span class='p'>,</span> <span class='kt'>Typeable</span><span class='p'>)</span>
+
+<span class='nf'>cmdLnConvertOne</span> <span class='ow'>::</span> <span class='kt'>CmdLnArgs</span>
+<span class='nf'>cmdLnConvertOne</span> <span class='ow'>=</span> <span class='kt'>CmdLnConvertOne</span>
+    <span class='p'>{</span> <span class='n'>argCabalFile</span> <span class='ow'>=</span> <span class='s'>&quot;&quot;</span> <span class='o'>&amp;=</span> <span class='n'>argPos</span> <span class='mi'>0</span> <span class='o'>&amp;=</span> <span class='n'>typ</span> <span class='s'>&quot;FILE|DIR|URL&quot;</span>
+    <span class='p'>,</span> <span class='n'>argCreateTar</span> <span class='ow'>=</span> <span class='kt'>False</span> <span class='o'>&amp;=</span> <span class='n'>name</span> <span class='s'>&quot;tar&quot;</span> <span class='o'>&amp;=</span> <span class='n'>explicit</span> <span class='o'>&amp;=</span> <span class='n'>help</span> <span class='s'>&quot;Create a tar-ball for the source package.&quot;</span>
+    <span class='p'>,</span> <span class='n'>argDataFiles</span> <span class='ow'>=</span> <span class='s'>&quot;&quot;</span> <span class='o'>&amp;=</span> <span class='n'>name</span> <span class='s'>&quot;sysinfo&quot;</span> <span class='o'>&amp;=</span> <span class='n'>typDir</span> <span class='o'>&amp;=</span> <span class='n'>explicit</span> <span class='o'>&amp;=</span> <span class='n'>help</span> <span class='s'>&quot;Use custom system information files.&quot;</span>
+    <span class='p'>}</span> <span class='o'>&amp;=</span> <span class='n'>auto</span> <span class='o'>&amp;=</span> <span class='n'>name</span> <span class='s'>&quot;conv&quot;</span> <span class='o'>&amp;=</span> <span class='n'>help</span> <span class='s'>&quot;Convert a single CABAL file.&quot;</span>
+
+<span class='nf'>cmdLnArgs</span> <span class='ow'>::</span> <span class='kt'>CmdLnArgs</span>
+<span class='nf'>cmdLnArgs</span> <span class='ow'>=</span> <span class='n'>modes</span> <span class='p'>[</span><span class='n'>cmdLnConvertOne</span><span class='p'>]</span>
+    <span class='o'>&amp;=</span> <span class='n'>program</span> <span class='s'>&quot;cabal2arch&quot;</span>
+    <span class='o'>&amp;=</span> <span class='n'>summary</span> <span class='p'>(</span><span class='s'>&quot;cabal2arch, v. &quot;</span> <span class='o'>++</span> <span class='n'>showVersion</span> <span class='n'>version</span> <span class='o'>++</span> <span class='s'>&quot;: Convert .cabal file to ArchLinux source package&quot;</span><span class='p'>)</span>
+
+<span class='nf'>main</span> <span class='ow'>::</span> <span class='kt'>IO</span> <span class='nb'>()</span>
+<span class='nf'>main</span> <span class='ow'>=</span> <span class='n'>cmdArgs</span> <span class='n'>cmdLnArgs</span> <span class='o'>&gt;&gt;=</span> <span class='n'>subCmd</span>
+</code></pre>
+</div><div class='highlight'><pre><code class='perl'><span class='c1'># https://github.com/mojombo/jekyll/blob/master/g.pl</span>
+
+<span class='c1'>#!/usr/bin/perl</span>
+<span class='c1'>#fetch Gravatars</span>
+
+<span class='k'>use</span> <span class='n'>strict</span><span class='p'>;</span>
+<span class='k'>use</span> <span class='n'>warnings</span><span class='p'>;</span>
+
+<span class='k'>use</span> <span class='nn'>LWP::</span><span class='n'>Simple</span><span class='p'>;</span>
+<span class='k'>use</span> <span class='nn'>Digest::</span><span class='n'>MD5</span> <span class='sx'>qw(md5_hex)</span><span class='p'>;</span>
+
+<span class='k'>my</span> <span class='nv'>$size</span> <span class='o'>=</span> <span class='mi'>90</span><span class='p'>;</span>
+<span class='k'>my</span> <span class='nv'>$output_dir</span> <span class='o'>=</span> <span class='s'>&#39;.git/avatar&#39;</span><span class='p'>;</span>
+
+<span class='nb'>die</span><span class='p'>(</span><span class='s'>&quot;no .git/ directory found in current path\n&quot;</span><span class='p'>)</span> <span class='k'>unless</span> <span class='o'>-</span><span class='n'>d</span> <span class='s'>&#39;.git&#39;</span><span class='p'>;</span>
+
+<span class='nb'>mkdir</span><span class='p'>(</span><span class='nv'>$output_dir</span><span class='p'>)</span> <span class='k'>unless</span> <span class='o'>-</span><span class='n'>d</span> <span class='nv'>$output_dir</span><span class='p'>;</span>
+
+<span class='nb'>open</span><span class='p'>(</span><span class='n'>GITLOG</span><span class='p'>,</span> <span class='sx'>q/git log --pretty=format:&quot;%ae|%an&quot; |/</span><span class='p'>)</span> <span class='ow'>or</span> <span class='nb'>die</span><span class='p'>(</span><span class='s'>&quot;failed to read git-log: $!\n&quot;</span><span class='p'>);</span>
+
+<span class='k'>my</span> <span class='nv'>%processed_authors</span><span class='p'>;</span>
+
+<span class='k'>while</span><span class='p'>(</span><span class='sr'>&lt;GITLOG&gt;</span><span class='p'>)</span> <span class='p'>{</span>
+    <span class='nb'>chomp</span><span class='p'>;</span>
+    <span class='k'>my</span><span class='p'>(</span><span class='nv'>$email</span><span class='p'>,</span> <span class='nv'>$author</span><span class='p'>)</span> <span class='o'>=</span> <span class='nb'>split</span><span class='p'>(</span><span class='sr'>/\|/</span><span class='p'>,</span> <span class='nv'>$_</span><span class='p'>);</span>
+
+    <span class='k'>next</span> <span class='k'>if</span> <span class='nv'>$processed_authors</span><span class='p'>{</span><span class='nv'>$author</span><span class='p'>}</span><span class='o'>++</span><span class='p'>;</span>
+
+    <span class='k'>my</span> <span class='nv'>$author_image_file</span> <span class='o'>=</span> <span class='nv'>$output_dir</span> <span class='o'>.</span> <span class='s'>&#39;/&#39;</span> <span class='o'>.</span> <span class='nv'>$author</span> <span class='o'>.</span> <span class='s'>&#39;.png&#39;</span><span class='p'>;</span>
+
+    <span class='c1'>#skip images we have</span>
+    <span class='k'>next</span> <span class='k'>if</span> <span class='o'>-</span><span class='n'>e</span> <span class='nv'>$author_image_file</span><span class='p'>;</span>
+
+    <span class='c1'>#try and fetch image</span>
+
+    <span class='k'>my</span> <span class='nv'>$grav_url</span> <span class='o'>=</span> <span class='s'>&quot;http://www.gravatar.com/avatar/&quot;</span><span class='o'>.</span><span class='n'>md5_hex</span><span class='p'>(</span><span class='nb'>lc</span> <span class='nv'>$email</span><span class='p'>)</span><span class='o'>.</span><span class='s'>&quot;?d=404&amp;size=&quot;</span><span class='o'>.</span><span class='nv'>$size</span><span class='p'>;</span>
+
+    <span class='nb'>warn</span> <span class='s'>&quot;fetching image for &#39;$author&#39; $email ($grav_url)...\n&quot;</span><span class='p'>;</span>
+
+    <span class='k'>my</span> <span class='nv'>$rc</span> <span class='o'>=</span> <span class='n'>getstore</span><span class='p'>(</span><span class='nv'>$grav_url</span><span class='p'>,</span> <span class='nv'>$author_image_file</span><span class='p'>);</span>
+
+    <span class='nb'>sleep</span><span class='p'>(</span><span class='mi'>1</span><span class='p'>);</span>
+
+    <span class='k'>if</span><span class='p'>(</span><span class='nv'>$rc</span> <span class='o'>!=</span> <span class='mi'>200</span><span class='p'>)</span> <span class='p'>{</span>
+        <span class='nb'>unlink</span><span class='p'>(</span><span class='nv'>$author_image_file</span><span class='p'>);</span>
+        <span class='k'>next</span><span class='p'>;</span>
+    <span class='p'>}</span>
+<span class='p'>}</span>
+
+<span class='nb'>close</span> <span class='n'>GITLOG</span><span class='p'>;</span>
+</code></pre>
+</div>
+<h2 id='blockquote'>Blockquote</h2>
+
+<blockquote>
+<p>Wise words, as they truly are wise.</p>
+
+<p>Or somehow like this.</p>
+
+<p>&#8211; Wise Man.</p>
+</blockquote>
+
+<h2 id='lists'>Lists</h2>
+
+<ul>
+<li>Number one.</li>
+
+<li>Number two.</li>
+
+<li>Number three.</li>
+
+<li>Number five.</li>
+</ul>
+
+<ol>
+<li>Number one.</li>
+
+<li>Number two.</li>
+
+<li>Number three.</li>
+
+<li>Number eight.</li>
+</ol>
+<dt>Title</dt><dd>Description</dd><dt>Once</dt><dd>Again</dd>
+<h2 id='headers'>Headers</h2>
+
+<h1 id='one'>One</h1>
+
+<h2 id='two'>Two</h2>
+
+<h3 id='three'>Three</h3>
+
+<h4 id='four'>Four</h4>
+
+<h5 id='five'>Five</h5>
+
+<h6 id='six'>Six</h6>
+
+<h2 id='tables'>Tables</h2>
+<table>
+	<tr>
+		<th>One</th>
+		<th>Two</th>
+		<th>Sixteen</th>
+	</tr>
+	<tr>
+		<td>Five</td>
+		<td>Million</td>
+		<td>Too much</td>
+	</tr>
+	<tr>
+		<td>Null</td>
+		<td>Zero</td>
+		<td><code>cat /dev/urandom</code></td>
+	</tr>
+	<tr>
+		<td>Ex</td>
+		<td>Be</td>
+		<td>Fourdred</td>
+	</tr>
+</table></p>
+
+			</div>
+			<hr>
+			<div class="footer">
+				Copyright (c) 2011 Szymon Urbaś
+			</div>
+		</div>
+	</body>
+</html>
