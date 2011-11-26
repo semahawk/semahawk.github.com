@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>Project Euler: Problem 36 in Perl &bull; Szymon Urbaś</title>
+		
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<!--<link href="/assets/stylesheets/bootstrap.css" rel="stylesheet" type="text/css">-->
+		<link rel="stylesheet/less" href="/less/base.less" type="text/css" />
+		<script src="/js/less-1.1.5.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1><a href="/">Szymon Urbas</a> <small>be blaggin'</small></h1>
+			</div>
+			<hr>
+			<div class="content">
+				<h1><a href="">Project Euler: Problem 36 in Perl</a>&nbsp;<small>Sat, 26 Nov 2011</small></h1>
+<p><h2 id='whats_it_about'>What&#8217;s it about</h2>
+<div class='highlight'><pre><code class='text'>The decimal number, 585 = 10010010012 (binary), is palindromic in both bases.
+
+Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
+
+(Please note that the palindromic number, in either base, may not include leading zeros.)
+</code></pre>
+</div>
+<h2 id='hints'>Hints</h2>
+<dt>Palindromic</dt><dd>A number which is exactly the same reading from left to right, and right to left, eg. 14641.</dd>
+<p>You would definitly need a function to convert from decimal to binary (or other way round :D). Then it&#8217;s just matter of looping through one million, and checking if number completes the statement.</p>
+
+<p><strong>Easy as carrot juice!</strong></p>
+
+<h1 id='the_solution_'>The solution <small>spoiler alert!</small></h1>
+
+<h3 id='bitizing'>Bitizing</h3>
+
+<p>For first we need a function that converts from decimal, to binary. I called main <code>bitize</code>. <em>wink</em>.</p>
+<div class='highlight'><pre><code class='perl'><span class='k'>sub </span><span class='nf'>bitize</span> <span class='p'>{</span>
+	<span class='c1'># array of bits</span>
+	<span class='k'>my</span> <span class='nv'>@bits</span> <span class='o'>=</span> <span class='sx'>qw()</span><span class='p'>;</span>
+	<span class='c1'># shift deletes the first argument from $_ array, and returns it. </span>
+	<span class='k'>my</span> <span class='nv'>$num</span> <span class='o'>=</span> <span class='nb'>shift</span><span class='p'>;</span>
+
+	<span class='k'>while</span> <span class='p'>(</span><span class='nv'>$num</span> <span class='o'>&gt;=</span> <span class='mi'>1</span><span class='p'>){</span>
+		<span class='c1'># even</span>
+		<span class='k'>if</span> <span class='p'>(</span><span class='nv'>$num</span> <span class='nv'>%</span> <span class='nv'>2</span> <span class='o'>==</span> <span class='mi'>0</span><span class='p'>){</span>
+			<span class='nb'>push</span><span class='p'>(</span><span class='nv'>@bits</span><span class='p'>,</span> <span class='mi'>0</span><span class='p'>);</span>
+		<span class='c1'># odd</span>
+		<span class='p'>}</span> <span class='k'>else</span> <span class='p'>{</span>
+			<span class='nb'>push</span><span class='p'>(</span><span class='nv'>@bits</span><span class='p'>,</span> <span class='mi'>1</span><span class='p'>);</span>
+		<span class='p'>}</span>
+		
+		<span class='nv'>$num</span> <span class='o'>/=</span> <span class='mi'>2</span><span class='p'>;</span>
+	<span class='p'>}</span>
+	
+	<span class='nb'>reverse</span> <span class='nv'>@bits</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Okay, we&#8217;re <strong>one step closer</strong>!</p>
+
+<h3 id='looping'>Looping</h3>
+<div class='highlight'><pre><code class='perl'><span class='c1'># this is the sum, the answer that is</span>
+<span class='k'>my</span> <span class='nv'>$sum</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>
+
+<span class='c1'># looping all the way to the million.</span>
+<span class='k'>for</span> <span class='p'>(</span><span class='nv'>$n</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='nv'>$n</span> <span class='o'>&lt;</span> <span class='mi'>1000000</span><span class='p'>;</span> <span class='nv'>$n</span><span class='o'>++</span><span class='p'>){</span>
+	<span class='c1'># here we check if the number is palindromic in base 10</span>
+    <span class='k'>if</span> <span class='p'>(</span><span class='nb'>reverse</span><span class='p'>(</span><span class='nv'>$n</span><span class='p'>)</span> <span class='o'>==</span> <span class='nv'>$n</span> <span class='o'>&amp;&amp;</span>
+        <span class='c1'># and here if it is in base 2</span>
+        <span class='n'>bitize</span><span class='p'>(</span><span class='nv'>$n</span><span class='p'>)</span> <span class='o'>==</span> <span class='nb'>reverse</span><span class='p'>(</span><span class='n'>bitize</span><span class='p'>(</span><span class='nv'>$n</span><span class='p'>))){</span>
+		<span class='c1'># gotcha!</span>
+		<span class='nv'>$sum</span> <span class='o'>+=</span> <span class='nv'>$n</span><span class='p'>;</span>
+	<span class='p'>}</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<h3 id='winning'>Winning!</h3>
+
+<p>Now there is only <strong>one</strong> thing left to do.</p>
+<div class='highlight'><pre><code class='perl'><span class='k'>print</span> <span class='s'>&quot;thee answah: $sum\n&quot;</span><span class='p'>;</span>
+</code></pre>
+</div>
+<h1 id='problem_36_beaten'>Problem 36 beaten!</h1></p>
+
+			</div>
+			<hr>
+			<div class="footer">
+				Copyright (c) 2011 Szymon Urbaś
+			</div>
+		</div>
+	</body>
+</html>
