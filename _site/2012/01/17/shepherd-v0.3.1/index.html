@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>Shepherd (v0.3.1) &bull; Szymon Urbaś</title>
+		
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<!--<link href="/assets/stylesheets/bootstrap.css" rel="stylesheet" type="text/css">-->
+		<link rel="stylesheet/less" href="/less/base.less" type="text/css" />
+		<script src="/js/less-1.1.5.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1><a href="/">Szymon Urbas</a> <small>be blaggin'</small></h1>
+			</div>
+			<hr>
+			<div class="content">
+				<h1><a href="">Shepherd (v0.3.1)</a>&nbsp;<small>Tue, 17 Jan 2012</small></h1>
+<p><h1 id='shewhat'>Shewhat?</h1>
+
+<p>Shepherd is a little command-line program that let&#8217;s you know how your projects are doing, like how many files/lines more there are and so-on.</p>
+
+<h1 id='few_bytes_about'>Few bytes about</h1>
+
+<p>Source code can be found at <a href='http://github.com/semahawk/shepherd'>GitHub</a>, issues page <a href='http://github.com/semahawk/shepherd/issues'>right there</a>, to create a new one <a href='http://github.com/semahawk/shepherd/issues/new'>click me</a>, here is shortcut to <a href='http://github.com/semahawk/shepherd/blob/master/CHANGELOG.md'>changelog</a>. As it is a <strong>gem</strong> you can also find it at <a href='http://rubygems.org/gems/shepherd'>RubyGems</a>.</p>
+
+<p>Shepherd is licensed under the MIT License, 2012 by this guy called Szymon Urbaś.</p>
+
+<h1 id='usage'>Usage</h1>
+
+<p>The executable is called <code>shep</code>. If you run it w/o any parameters it will print help. The same result can be obtained by running <code>shep --help</code>. If you needed a help with a certain command, just run <code>shep command --help</code>.</p>
+
+<h1 id='installing'>Installing</h1>
+
+<p>Shepherd is a gem, so the following should do the job.</p>
+
+<pre><code>gem install shepherd</code></pre>
+
+<p>If you&#8217;re not using <a href='http://rvm.beginrescueend.com/'>RVM</a> (shame on you! it&#8217;s superious!), you might have to run it as root.</p>
+
+<h1 id='getting_started'>Getting started!</h1>
+
+<h2 id='init'>Init</h2>
+
+<p>For first you would have to let Shepherd know which projects you want to look after/take care of/check/whatever I should call it.</p>
+
+<p>To achieve this perform the following:</p>
+
+<pre><code>cd path/to/the/project
+shep init</code></pre>
+
+<p>This will init a project called <code>project</code> (just like the most-top dir is) which lives in <code>path/to/the/project</code>.</p>
+
+<p>You can also specify a path to the project (so there is no need to <code>cd</code> there) like this:</p>
+
+<pre><code>shep init --path your/projects/home</code></pre>
+
+<p>That will init a project with a name <code>home</code>. To change the name at the init point:</p>
+
+<pre><code>shep init [--path PATH] --name Project</code></pre>
+
+<p>The <code>init</code> command should output something like this:</p>
+
+<pre><code>Our brave-hearted Shepherd gained a new sheep!
+
+   path: /home/user/code/my/awsum/project
+   name: project
+
+  state: 20 files
+         1.378 lines
+         71.415 chars
+
+         88 KB (90.342 bytes)</code></pre>
+
+<p>If you don&#8217;t want any string to be outputted just simply pass the <code>--quiet</code> (short: <code>-q</code>) option.</p>
+
+<h2 id='list'>List</h2>
+
+<p>To list all projects you&#8217;ve <code>init</code>ed, run <code>shep list</code>. It will print output in a following format:</p>
+
+<pre><code>ID. NAME in PATH
+    COUNT files - COUNT lines - COUNT chars
+    COUNT KB/MB/.. (COUNT bytes)</code></pre>
+
+<p>If you pass <code>--one-line</code> argument, it will look just like this:</p>
+
+<pre><code>ID. NAME in PATH</code></pre>
+
+<h2 id='show'>Show</h2>
+
+<p>To see a current state of a specific project run <code>shep show &lt;project&gt;</code>. It will print an output in a following format:</p>
+
+<pre><code>    id: ID
+  name: NAME
+  path: PATH
+
+ state: COUNT files
+        COUNT lines
+        COUNT chars
+
+        COUNT KB/MB/.. (COUNT bytes)
+
+ initialized at YYYY-MM-DD HH:MM:SS
+     updated at YYYY-MM-DD HH:MM:SS</code></pre>
+
+<p>&#8220;initialized at&#8221; tells us when you inited the project, &#8220;updated at&#8221; tells us when did you last run <code>shep update</code>. But we&#8217;ll talk about it later.</p>
+
+<p><code>shep show</code> just simply shows, how many files/lines/.. there are. To see how many more/less there is, use <code>shep check</code> command.</p>
+
+<h2 id='check'>Check</h2>
+
+<p>If a current state of the project is exactly the same as it was when you ran <code>init</code>/<code>update</code>, the output of <code>shep check &lt;project&gt;</code> will look like this:</p>
+
+<pre><code>   name: NAME from PATH
+
+  state: COUNT files
+         COUNT lines
+         COUNT chars 
+
+         COUNT KB/MB/..
+
+  since: YYYY-MM-DD HH:MM:SS</code></pre>
+
+<p><strong>Note:</strong> &#8220;since&#8221; is the same as &#8220;updated at&#8221; in <code>show</code> command.</p>
+
+<p>If you actually have made some changes to a project, let&#8217;s say you added 28 characters in a new line, you should really get to work, and the output will look something like this:</p>
+
+<pre><code>   name: fish from /home/deep/ocean 
+
+  state: 20 files
+         1.420 lines (1.419 + 1)
+         83.549 chars (83.521 + 29)
+
+         93 KB (93 KB + 29 B)
+
+  since: 2012-01-12 14:43:12</code></pre>
+
+<p>I think it&#8217;s quite self-explanatory. It&#8217;s not? Uhm, ok.. Line <code>83.549 chars (83.521 + 29)</code> in human language would be written like this: <code>new number of chars (old number of lines + number of new lines)</code>. If you deleted some things, quite simillar thing will show up.</p>
+
+<h2 id='update'>Update</h2>
+
+<p>This command will simply update data in the database.</p>
+
+<h2 id='rename'>Rename</h2>
+
+<p>That&#8217;s a new feature in version 0.3.1. It allows to rename a project. Usage:</p>
+
+<pre><code>shep rename &lt;oldname&gt; &lt;newname&gt;</code></pre>
+
+<h2 id='remove'>Remove</h2>
+
+<p>To remove a project, run <code>shep rm &lt;project&gt;</code>.</p>
+
+<h1 id='contributing'>Contributing</h1>
+
+<p>If you want to contribute, just fork the repo on GitHub, start your branch, hack, hack, commit, hack, commit, and when you&#8217;re happy with the changes - send me a pull request. Any ideas are welcome!</p>
+
+<h1 id='epilogue'>Epilogue</h1>
+
+<p>Well, that seems to be it. If you have any questions don&#8217;t hesitate to <a href='mailto:semahawk@hush.ai'>email</a> me. If you found a bug, please create a <a href='http://github.com/semahawk/shepherd/issues/new'>new issue</a>.</p></p>
+
+			</div>
+			<hr>
+			<div class="footer">
+				Copyright (c) 2011 Szymon Urbaś
+			</div>
+		</div>
+	</body>
+</html>
